@@ -30,18 +30,23 @@
                                     <span class="old-price" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
                                 </div>
                             </div>
+                            <div class="cartControl-wrapper">
+                                <cartcontrol :food="food"></cartcontrol>
+                            </div>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
-        <shopcart></shopcart>
+        <shopcart :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice"
+                  :minPrice="seller.minPrice"></shopcart>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
     import BSroll from 'better-scroll';
     import shopcart from '../../components/shopcart/shopcart.vue';
+    import cartcontrol from '../../components/cartcontrol/cartcontrol.vue';
     const ERR_OK = 0;
     export default {
         data () {
@@ -78,6 +83,17 @@
                         return i;
                     }
                 }
+            },
+            selectFoods () {
+                let foods = [];
+                this.goods.forEach((good) => {
+                    good.foods.forEach((food) => {
+                        if (food.count) {
+                            foods.push(food);
+                        }
+                    });
+                });
+                return foods;
             }
         },
         methods: {
@@ -114,7 +130,8 @@
             }
         },
         components: {
-            shopcart
+            shopcart,
+            cartcontrol
         }
     };
 </script>
@@ -183,6 +200,7 @@
                     font-weight: normal / 700
                     background-color: #f3f5f7
                 .food-item
+                    position: relative
                     display: flex
                     width: 100%
                     padding: 18px
@@ -220,6 +238,9 @@
                                 text-decoration: line-through
                                 font-size: 10px
                                 color: rgb(147, 153, 159)
-
-
+                    .cartControl-wrapper
+                        position: absolute
+                        bottom: 0
+                        right: 50px
 </style>
+
