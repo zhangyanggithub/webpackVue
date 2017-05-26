@@ -1,25 +1,20 @@
 <template>
     <div class="cart-control">
         <transition name="move">
-            <div class="decrease-count control" @click="removeCart($event)" v-show="food.count>0">
+            <div class="decrease-count control" @click.stop.prevent="decreaseCart" v-show="food.count>0">
                 <i class="icon-remove_circle_outline"></i>
             </div>
         </transition>
-        <div class="count control" v-show="count>0">{{count}}</div>
-        <div class="increase-count control" @click="addCart($event)">
+        <div class="count control" v-show="food.count>0">{{food.count}}</div>
+        <div class="increase-count control" @click.stop.prevent="addCart">
             <i class="icon-add_circle"></i>
         </div>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
-    import Vue from 'Vue';
+    import Vue from 'vue';
     export default {
-        data () {
-            return {
-                count: 0
-            };
-        },
         props: {
             food: {
                 type: Object
@@ -32,22 +27,18 @@
                 }
                 if (!this.food.count) {
                     Vue.set(this.food, 'count', 1);
-                    this.count = 1;
                 } else {
-                    this.count++;
-                    Vue.set(this.food, 'count', this.count);
-//                    this.food.count = this.count;
+                    this.food.count++;
                 }
-                console.log('add  ' + this.food.count);
+                this.$emit('add', event.target);
             },
-            removeCart (event) {
+            decreaseCart (event) {
                 if (!event._constructed) {
                     return;
                 }
-                this.count--;
-                Vue.set(this.food, 'count', this.count);
-//                this.food.count = this.count;
-                console.log('remove  ' + this.food.count);
+                if (this.food.count) {
+                    this.food.count--;
+                }
             }
         }
     };
@@ -78,6 +69,4 @@
             line-height: 24px
             margin: 0 6px
             padding: 6px 0
-
-
 </style>

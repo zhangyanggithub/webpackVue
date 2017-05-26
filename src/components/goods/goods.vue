@@ -16,7 +16,8 @@
                 <li v-for="item in goods" class="food-list  food-list-hook">
                     <h1 class="title">{{item.name}}</h1>
                     <ul>
-                        <li v-for="(food,index) in item.foods" class="food-item border-1px">
+                        <li @click="selectFood(food,$event)" v-for="(food,index) in item.foods"
+                            class="food-item border-1px">
                             <div class="icon">
                                 <img width="57" height="57" :src="food.icon" alt="icon">
                             </div>
@@ -31,22 +32,24 @@
                                 </div>
                             </div>
                             <div class="cartControl-wrapper">
-                                <cartcontrol :food="food"></cartcontrol>
+                                <cartcontrol @add="addFood" :food="food"></cartcontrol>
                             </div>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
-        <shopcart :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice"
+        <shopcart ref="shopcart" :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice"
                   :minPrice="seller.minPrice"></shopcart>
+        <food :food="selectedFood" @add="addFood" ref="food"></food>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
-    import BSroll from 'better-scroll';
+    import BScroll from 'better-scroll';
     import shopcart from '../../components/shopcart/shopcart.vue';
     import cartcontrol from '../../components/cartcontrol/cartcontrol.vue';
+    import food from '../../components/food/food.vue';
     const ERR_OK = 0;
     export default {
         data () {
@@ -54,7 +57,8 @@
                 goods: [],
                 foodsHeight: [],
                 menuHeight: [],
-                scrollY: 0
+                scrollY: 0,
+                selectedFood: {}
             };
         },
         props: {
@@ -97,6 +101,16 @@
             }
         },
         methods: {
+            selectFood (food, event) {
+                if (!event._constructed) {
+                    return;
+                }
+                this.selectedFood = food;
+                this.$refs.food.show();
+            },
+            addFood (target) {
+                this._drop(target);
+            },
             clickMenu (index, event) {
                 if (!event._constructed) {
                     return;
@@ -107,16 +121,15 @@
                 this.foodsScroll.scrollToElement(el, 100);
             },
             _initScroll () {
-                this.menuScroll = new BSroll(this.$refs.menuWrapper, {
+                this.menuScroll = new BScroll(this.$refs.menuWrapper, {
                     click: true
                 });
-                this.foodsScroll = new BSroll(this.$refs.foodsWrapper, {
+                this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
                     probeType: 3,
                     click: true
                 });
                 this.foodsScroll.on('scroll', (pos) => {
                     this.scrollY = Math.abs(Math.round(pos.y));
-//                    this._selectMenu();
                 });
             },
             _caculateHeight () {
@@ -127,11 +140,19 @@
                     height += foodsList[i].clientHeight;
                     this.foodsHeight.push(height);
                 }
+            },
+            _drop (target) {
+//               //
+// 异步执行
+                this.$nextTick(() => {
+                    this.$refs.shopcart.drop(target);
+                });
             }
         },
         components: {
             shopcart,
-            cartcontrol
+            cartcontrol,
+            food
         }
     };
 </script>
