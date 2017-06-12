@@ -17,7 +17,7 @@
                         </div>
                         <div class="buy">
                             <span class="now-price">¥{{food.price}}</span>
-                            <span class="old-price">¥{{food.oldPrice}}</span>
+                            <span class="old-price" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
                             <div class="cartcontrol-wrapper">
                                 <cartcontrol @add="addFood" :food="food" v-show="food.count>0"></cartcontrol>
                             </div>
@@ -156,7 +156,7 @@
                 .title-content
                     padding: 18px 18px 16px 18px
                     h1
-                        font-zise: 14px
+                        font-size: 14px
                         font-weight: 700
                         color: rgb(7, 17, 27)
                         line-height: 14px
@@ -203,7 +203,7 @@
                     .detail
                         padding: 18px
                         h1
-                            font-zise: 14px
+                            font-size: 14px
                             font-weight: 200
                             color: rgb(7, 17, 27)
                             line-height: 14px
@@ -214,12 +214,11 @@
                             color: rgb(77, 85, 93)
                             line-height: 24px
 
-
                 .rating
-                    padding-top:18px
+                    padding-top: 18px
                     .title
-                        padding-top:18px
-                        font-zise: 14px
+                        padding-left: 18px
+                        font-size: 14px
                         font-weight: 200
                         color: rgb(7, 17, 27)
                         line-height: 14px

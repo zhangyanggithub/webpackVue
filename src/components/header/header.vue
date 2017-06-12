@@ -291,7 +291,7 @@
                 position: relative
                 width: 32px
                 height: 32px
-                margin: -64px auto 0 auto
+                margin: -84px auto 0 auto
                 clear: both
                 font-size 32px
                 .icon-close

@@ -118,7 +118,7 @@
                         } else {
                             this.scroll.refresh();
                         }
-                     });
+                    });
                 }
                 return show;
             },
@@ -361,6 +361,7 @@
                     color: rgb(0, 160, 220)
                     line-height: 40px
             .list-content
+                max-height: 201px
                 .list-ul
                     background-color: #FFF
                     overflow: hidden

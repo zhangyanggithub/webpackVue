@@ -15,7 +15,7 @@
             </span>
             <span class="text">只看有内容的评价</span>
         </div>
-        <div class="ratings-list">
+        <div class="ratings-list" ref="ratingListWrapper">
             <ul v-show="ratings && ratings.length">
                 <li class="rating-li" v-for="rating in ratings" v-show="selectItem(rating.rateType,rating.text)">
                     <div class="time">{{ratingTime(rating.rateTime)}}</div>
